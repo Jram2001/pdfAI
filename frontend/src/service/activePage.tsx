@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useState, useContext, type ReactNode } from 'react';
+import { createContext, useState, useContext, type ReactNode } from 'react';
 import type { ActiveNumberContextType } from '../types/global-types';
 
 // Create the context with undefined as default and proper typing
