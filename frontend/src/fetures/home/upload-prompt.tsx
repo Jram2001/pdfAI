@@ -1,20 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import type { ChangeEvent, DragEvent, KeyboardEvent } from 'react';
-
-interface UploadPromptProps {
-    onFileSelect?: (files: FileList) => void;
-    onError?: (error: FileUploadError) => void;
-    maxFileSize?: number;
-    acceptedTypes?: readonly string[];
-    className?: string;
-    disabled?: boolean;
-}
-
-interface FileUploadError {
-    readonly type: 'size' | 'type' | 'general';
-    readonly message: string;
-    readonly file?: File;
-}
+import type { UploadPromptProps, FileUploadError } from '../../types/global-types';
 
 const UploadPrompt: React.FC<UploadPromptProps> = ({
     onFileSelect,
@@ -27,8 +14,8 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
     const [dragActive, setDragActive] = React.useState<boolean>(false);
     const [error, setError] = React.useState<FileUploadError | null>(null);
 
+    // Validates size and extension of the uploaded file
     const validateFile = (file: File): FileUploadError | null => {
-        // Check file size
         const fileSizeMB: number = file.size / (1024 * 1024);
         if (fileSizeMB > maxFileSize) {
             return {
@@ -38,7 +25,7 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
             };
         }
 
-        // Check file type
+        // Extract file extension and check against acceptedTypes
         const fileExtension: string = '.' + (file.name.split('.').pop()?.toLowerCase() ?? '');
         if (!acceptedTypes.includes(fileExtension)) {
             return {
@@ -51,6 +38,7 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
         return null;
     };
 
+    // Handles all file selection logic (input, drop, etc.)
     const handleFiles = React.useCallback((files: FileList | null): void => {
         if (!files || files.length === 0 || disabled) return;
 
@@ -67,11 +55,13 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
         onFileSelect?.(files);
     }, [disabled, maxFileSize, acceptedTypes, onFileSelect, onError]);
 
+    // Handles input change (file selection via dialog)
     const handleFileUpload = (event: ChangeEvent<HTMLInputElement>): void => {
         handleFiles(event.target.files);
-        event.target.value = '';
+        event.target.value = ''; // Allows selecting same file again
     };
 
+    // Set dragActive state when file is dragged over the dropzone
     const handleDragOver = (event: DragEvent<HTMLDivElement>): void => {
         event.preventDefault();
         if (!disabled) {
@@ -79,13 +69,16 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
         }
     };
 
+    // Remove dragActive state when drag leaves the dropzone
     const handleDragLeave = (event: DragEvent<HTMLDivElement>): void => {
         event.preventDefault();
+        // Only remove drag state if truly leaving the container
         if (!event.currentTarget.contains(event.relatedTarget as Node)) {
             setDragActive(false);
         }
     };
 
+    // Process dropped files
     const handleDrop = (event: DragEvent<HTMLDivElement>): void => {
         event.preventDefault();
         setDragActive(false);
@@ -94,9 +87,11 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
         }
     };
 
+    // Supports keyboard-triggering the upload input (accessibility)
     const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>): void => {
         if ((event.key === 'Enter' || event.key === ' ') && !disabled) {
             event.preventDefault();
+            // Programmatically trigger the file input
             const fileInput = event.currentTarget.querySelector('input[type="file"]') as HTMLInputElement | null;
             fileInput?.click();
         }
@@ -106,6 +101,7 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
         setError(null);
     };
 
+    // Styling based on state (disabled, error, active)
     const containerClasses = React.useMemo((): string => {
         const baseClasses = `
       group relative cursor-pointer 
@@ -157,7 +153,7 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
             aria-describedby={error ? "upload-error" : "upload-description"}
             aria-disabled={disabled}
         >
-            {/* Hidden file input */}
+            {/* Hidden file input overlays the drop area */}
             <input
                 type="file"
                 accept={acceptedTypes.join(',')}
@@ -191,12 +187,10 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
                 </svg>
             </div>
 
-            {/* Main text */}
             <h2 className="mb-2 text-xl font-semibold text-gray-800 dark:text-gray-200 text-center">
                 Upload <span className="text-indigo-500">PDF</span> to start chatting
             </h2>
 
-            {/* Subtitle */}
             <p
                 id="upload-description"
                 className="text-sm text-gray-600 dark:text-gray-400 text-center"
@@ -204,14 +198,14 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
                 {disabled ? 'Upload is currently disabled' : 'Click or drag and drop your file here'}
             </p>
 
-            {/* File type hint */}
+            {/* File type and size info (only shows with no error) */}
             {!error && (
                 <p className="mt-2 text-xs text-gray-500 dark:text-gray-500">
                     Supports {acceptedTypes.join(', ')} files up to {maxFileSize}MB
                 </p>
             )}
 
-            {/* Error message */}
+            {/* Shows validation error if any */}
             {error && (
                 <div id="upload-error" className="mt-4 p-3 bg-red-100 dark:bg-red-900/30 rounded-lg">
                     <p className="text-sm text-red-600 dark:text-red-400 text-center">
@@ -232,5 +226,5 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
 
 export default UploadPrompt;
 
-// Export types for external use
+// Types available for module consumers
 export type { UploadPromptProps, FileUploadError };

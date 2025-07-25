@@ -1,25 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
 import UploadPrompt, { type FileUploadError } from '../../../fetures/home/upload-prompt';
 import { pdfjs } from 'react-pdf';
 import ViewPDF from '../../../fetures/home/view-pdf';
 import './home.css'
 import Chat from '../../../fetures/home/chat';
-export default function Home() {
-    const [uploadedFile, setUploadedFile] = React.useState<File[]>([]);
-    const [isFileUploaded, setIsFileUploaded] = React.useState(false);
+import { uploadPDF } from '../../../service/pdf-api';
+import axios from 'axios';
 
+// Defines the expected structure for the PDF upload response.
+export interface UploadPDFResponse {
+    message: string;
+    totalPages: number;
+    chunksStored: number;
+}
+
+export default function Home() {
+    // State to manage the file(s) uploaded by the user.
+    const [uploadedFile, setUploadedFile] = React.useState<File[]>([]);
+    // State to control the display of either the upload prompt or the PDF viewer/chat.
+    const [isFileUploaded, setIsFileUploaded] = React.useState(false);
+    // State to store the initial message received after a successful PDF upload.
+    const [initialMessage, setInitialMessage] = useState('');
+    // State to store the active page visible.
+
+    // Configures pdfjs worker source globally for PDF rendering.
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-    const handleFileSelect = (files: FileList): void => {
-        setIsFileUploaded(true);
-        setUploadedFile(Array.from(files));
-        console.log('Selected files:', Array.from(files));
+    /**
+     * Handles the file selection event, updates UI, and uploads the selected PDF.
+     * @param files The FileList object containing the selected files.
+     */
+    const handleFileSelect = async (files: FileList) => {
+        const fileArray = Array.from(files);
+        setUploadedFile(fileArray);
+
+        try {
+            const response = await uploadPDF(fileArray[0]);
+            setInitialMessage(response.data.message);
+            setIsFileUploaded(true);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error('Upload failed:', error.response?.data || error.message);
+            } else {
+                console.error('Unexpected error:', error);
+            }
+        }
     };
 
+    /**
+     * Callback for handling errors during file upload.
+     * @param error Details of the file upload error.
+     */
     const handleError = (error: FileUploadError): void => {
         console.error('Upload error:', error);
     };
 
+    /**
+     * Resets the UI to show the file upload prompt.
+     */
     const handleBackToUpload = (): void => {
         setIsFileUploaded(false);
         setUploadedFile([]);
@@ -27,6 +65,7 @@ export default function Home() {
 
     return (
         <>
+            {/* Conditionally renders the UploadPrompt or the PDF viewer/chat layout. */}
             {!isFileUploaded ? (
                 <UploadPrompt
                     onFileSelect={handleFileSelect}
@@ -37,15 +76,16 @@ export default function Home() {
                 />
             ) : (
                 <div className='w-full box-border h-1/1 flex relative'>
+                    {/* Container for the Chat component, occupying half the width. */}
                     <div className='h-1/1 w-1/2 overflow-hidden relative'>
-                        <Chat />
+                        <Chat initialMessage={initialMessage} />
                     </div>
 
-                    <div className="h-full w-1/2 flex items-center justify-center border-2 border-neutral-800 bg-neutral-800/40 rounded-2xl pdf-canvas-container">
+                    {/* Container for the PDF viewer, also occupying half the width. */}
+                    <div className="h-full w-1/2 flex items-center justify-center bg-neutral-800/80 text-white border border-neutral-700/50 rounded-lg pdf-canvas-container">
                         <ViewPDF
                             pdfFiles={uploadedFile}
-                            onBackToUpload={handleBackToUpload}
-                        />
+                            onBackToUpload={handleBackToUpload} />
                     </div>
                 </div>
             )}

@@ -1,3 +1,8 @@
-  .rpv-core__inner-page {
-      background: transparent !important;
-  }
+::-webkit-scrollbar {
+    display: none;
+}
+
+.rpv-core__inner-page {
+    background-color: rgba(0, 0, 0, 0) !important;
+    transform: translateX(0px) !important;
+}

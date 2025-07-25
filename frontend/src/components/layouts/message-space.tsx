@@ -1,34 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MessageBubble from './message-bubble';
+import type { ChatHistoryProps } from '../../types/global-types';
 
-const MessageSpace: React.FC = () => {
+const MessageSpace: React.FC<ChatHistoryProps> = ({ messages }) => {
+
+    useEffect(() => {
+        console.log(messages, 'messages');
+    }, []);
+
     return (
-        <div className="space-y-2 p-4">
-            <MessageBubble
-                message="Hello! How can I help you today?"
-                sender="bot"
-                timestamp="2:30 PM"
-            />
-
-            <MessageBubble
-                message="I need help with my React component"
-                sender="user"
-                timestamp="2:31 PM"
-            />
-
-            <MessageBubble
-                message="I'd be happy to help! What specific issue are you having with your React component?"
-                sender="bot"
-                timestamp="2:31 PM"
-            />
-
-            {/* Loading message */}
-            <MessageBubble
-                message=""
-                sender="bot"
-                isLoading={true}
-            />
-        </div>
+        <>
+            {messages.map((msg, index) => (
+                <MessageBubble
+                    key={index}
+                    message={messages[index].message}
+                    sender={msg.sender}
+                    timestamp={msg.timestamp}
+                    isLoading={msg.isLoading}
+                />
+            ))}
+        </>
     );
 };
 

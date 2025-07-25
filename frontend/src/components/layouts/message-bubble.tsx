@@ -1,17 +1,12 @@
 import React from 'react';
-
-interface MessageProps {
-    message: string;
-    sender: 'user' | 'bot';
-    timestamp?: string;
-    isLoading?: boolean;
-}
+import PageText from '../../util/util';
+import type { MessageProps } from '../../types/global-types';
 
 const MessageBubble: React.FC<MessageProps> = ({
     message,
     sender,
     timestamp,
-    isLoading = false
+    isLoading = false,
 }) => {
     const isUser = sender === 'user';
 
@@ -21,12 +16,12 @@ const MessageBubble: React.FC<MessageProps> = ({
             ${isUser ? 'justify-end' : 'justify-start'}
         `}>
             <div className={`
-                relative max-w-[70%] sm:max-w-[60%] group
+                relative flex flex-col justify-end max-w-[70%] sm:max-w-[60%] group
                 ${isUser ? 'ml-auto' : 'mr-auto'}
             `}>
                 {/* Message bubble */}
                 <div className={`
-                    px-4 py-3 rounded-lg text-sm font-medium
+                    px-4 py-3 w-full rounded-lg text-sm font-medium
                     transition-all duration-200 ease-in-out
                     backdrop-blur-sm
                     ${isUser
@@ -36,8 +31,8 @@ const MessageBubble: React.FC<MessageProps> = ({
                     ${isLoading ? 'animate-pulse' : ''}
                 `}>
                     {isLoading ? (
-                        <div className="flex items-center space-x-1">
-                            <div className="flex space-x-1">
+                        <div className="flex items-center w-min ">
+                            <div className="flex space-x-1 w-min">
                                 <div className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce"
                                     style={{ animationDelay: '0ms' }} />
                                 <div className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce"
@@ -47,8 +42,8 @@ const MessageBubble: React.FC<MessageProps> = ({
                             </div>
                         </div>
                     ) : (
-                        <p className="whitespace-pre-wrap break-words leading-relaxed">
-                            {message}
+                        <p className="whitespace-pre-wrap w-full  break-words leading-relaxed ">
+                            <PageText text={message} />
                         </p>
                     )}
                 </div>
