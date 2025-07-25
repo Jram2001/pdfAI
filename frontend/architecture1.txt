@@ -12,30 +12,50 @@
 │   ├── App.tsx
 │   ├── app
 │   │   └── routes
-│   │       └── auth
-│   │           └── login.tsx
+│   │       ├── auth
+│   │       │   └── login.tsx
+│   │       └── home
+│   │           ├── home.css
+│   │           └── home.tsx
 │   ├── assets
 │   │   └── react.svg
 │   ├── components
 │   │   └── layouts
-│   │       └── auth-layout.tsx
+│   │       ├── auth-layout.tsx
+│   │       ├── message-bubble.tsx
+│   │       ├── message-input.tsx
+│   │       └── message-space.tsx
+│   ├── constants
+│   │   └── glocal-constant.ts
 │   ├── fetures
-│   │   └── auth
-│   │       └── components
-│   │           ├── login-form.tsx
-│   │           └── sign-up-form.tsx
+│   │   ├── auth
+│   │   │   └── components
+│   │   │       ├── login-form.tsx
+│   │   │       └── sign-up-form.tsx
+│   │   └── home
+│   │       ├── chat.tsx
+│   │       ├── upload-prompt.tsx
+│   │       ├── view-pdf.css
+│   │       └── view-pdf.tsx
 │   ├── index.css
 │   ├── lib
 │   │   ├── auth.tsx
 │   │   └── validation.tsx
 │   ├── main.tsx
+│   ├── service
+│   │   ├── activePage.tsx
+│   │   └── pdf-api.ts
+│   ├── types
+│   │   └── global-types.ts
 │   ├── ui
 │   │   ├── Input.tsx
 │   │   └── button.tsx
+│   ├── util
+│   │   └── util.tsx
 │   └── vite-env.d.ts
 ├── tsconfig.app.json
 ├── tsconfig.json
 ├── tsconfig.node.json
 └── vite.config.ts
 
-14 directories, 25 files
+20 directories, 39 files

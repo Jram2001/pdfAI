@@ -101,29 +101,29 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
         setError(null);
     };
 
-    // Styling based on state (disabled, error, active)
+    // Styling based on state (disabled, error, active) - Dark mode only
     const containerClasses = React.useMemo((): string => {
         const baseClasses = `
       group relative cursor-pointer 
-      dark:bg-[#090909] bg-white
+      bg-[#090909]
       flex flex-col items-center justify-center 
       rounded-2xl border transition-all duration-300 ease-in-out
       p-12
     `;
 
         if (disabled) {
-            return `${baseClasses} opacity-50 cursor-not-allowed border-gray-200 dark:border-gray-700`;
+            return `${baseClasses} opacity-50 cursor-not-allowed border-gray-700`;
         }
 
         if (error) {
-            return `${baseClasses} border-red-400 bg-red-50 dark:bg-red-900/20`;
+            return `${baseClasses} border-red-400 bg-red-900/20`;
         }
 
         if (dragActive) {
-            return `${baseClasses} border-indigo-400 bg-indigo-50 dark:bg-indigo-900/20`;
+            return `${baseClasses} border-indigo-400 bg-indigo-900/20`;
         }
 
-        return `${baseClasses} border-gray-300 dark:border-gray-600 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:border-indigo-400 dark:hover:border-indigo-400`;
+        return `${baseClasses} border-gray-600 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:border-indigo-400`;
     }, [disabled, error, dragActive]);
 
     const iconClasses = React.useMemo((): string => {
@@ -137,7 +137,7 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
             return `${baseClasses} border-indigo-400 text-indigo-400`;
         }
 
-        return `${baseClasses} border-gray-300 dark:border-gray-600 group-hover:border-indigo-400 group-hover:text-indigo-400`;
+        return `${baseClasses} border-gray-600 group-hover:border-indigo-400 group-hover:text-indigo-400`;
     }, [error, dragActive]);
 
     return (
@@ -174,7 +174,7 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
             w-8 h-8 transition-colors duration-300
             ${error
                             ? 'text-red-400'
-                            : 'text-gray-600 dark:text-gray-400 group-hover:text-indigo-400'
+                            : 'text-gray-400 group-hover:text-indigo-400'
                         }
           `}
                     aria-hidden="true"
@@ -187,28 +187,28 @@ const UploadPrompt: React.FC<UploadPromptProps> = ({
                 </svg>
             </div>
 
-            <h2 className="mb-2 text-xl font-semibold text-gray-800 dark:text-gray-200 text-center">
+            <h2 className="mb-2 text-xl font-semibold text-gray-200 text-center">
                 Upload <span className="text-indigo-500">PDF</span> to start chatting
             </h2>
 
             <p
                 id="upload-description"
-                className="text-sm text-gray-600 dark:text-gray-400 text-center"
+                className="text-sm text-gray-400 text-center"
             >
                 {disabled ? 'Upload is currently disabled' : 'Click or drag and drop your file here'}
             </p>
 
             {/* File type and size info (only shows with no error) */}
             {!error && (
-                <p className="mt-2 text-xs text-gray-500 dark:text-gray-500">
+                <p className="mt-2 text-xs text-gray-500">
                     Supports {acceptedTypes.join(', ')} files up to {maxFileSize}MB
                 </p>
             )}
 
             {/* Shows validation error if any */}
             {error && (
-                <div id="upload-error" className="mt-4 p-3 bg-red-100 dark:bg-red-900/30 rounded-lg">
-                    <p className="text-sm text-red-600 dark:text-red-400 text-center">
+                <div id="upload-error" className="mt-4 p-3 bg-red-900/30 rounded-lg">
+                    <p className="text-sm text-red-400 text-center">
                         {error.message}
                     </p>
                     <button

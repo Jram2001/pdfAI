@@ -133,7 +133,7 @@ const ViewPDF: React.FC<PDFViewerProps> = ({
     useEffect(() => {
         if (!isDocumentLoaded) return;
 
-        const observer = new MutationObserver((mutations, obs) => {
+        const observer = new MutationObserver((_mutations, obs) => {
             const pages = document.querySelectorAll('.rpv-core__inner-page-container');
             if (pages.length > 0) {
                 hideAllPages();

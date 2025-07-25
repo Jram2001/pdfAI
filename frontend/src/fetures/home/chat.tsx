@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import MessageInput from "../../components/layouts/message-input";
-import MessageSpace, { type ChatMessage } from "../../components/layouts/message-space";
+import MessageSpace from "../../components/layouts/message-space";
 import { queryPDF } from "../../service/pdf-api";
 import type { AxiosResponse } from "axios";
-import type { QueryPDFResponse } from "../../types/global-types";
+import type { ChatMessage, QueryPDFResponse } from "../../types/global-types";
 
 const Chat: React.FC<{ initialMessage: string }> = ({ initialMessage }) => {
     // Use useState to control chatHistory

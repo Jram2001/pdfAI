@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import MessageBubble from './message-bubble';
 import type { ChatHistoryProps } from '../../types/global-types';
 
 const MessageSpace: React.FC<ChatHistoryProps> = ({ messages }) => {
-
-    useEffect(() => {
-        console.log(messages, 'messages');
-    }, []);
 
     return (
         <>

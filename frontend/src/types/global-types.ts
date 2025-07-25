@@ -1,3 +1,4 @@
+// --- Types for API responses (adjust as needed for your real API) ---
 export interface UploadPDFResponse {
     message: string;
     totalPages: number;
