@@ -2,7 +2,7 @@ import axios, { type AxiosResponse } from 'axios';
 import type { UploadPDFResponse, QueryPDFResponse, SimpleQueryPDFResponse } from '../types/global-types';
 
 // Replace with your actual backend URL
-const BASE_URL = `${import.meta.env.VITE_BASE_URL}/pdf`;
+const BASE_URL = `https://pdfai-1-30gd.onrender.com/pdf`;
 
 // --- Services ---
 
