@@ -1,0 +1,41 @@
+.
+├── README.md
+├── architecture1.txt
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── public
+│   └── vite.svg
+├── src
+│   ├── App.css
+│   ├── App.tsx
+│   ├── app
+│   │   └── routes
+│   │       └── auth
+│   │           └── login.tsx
+│   ├── assets
+│   │   └── react.svg
+│   ├── components
+│   │   └── layouts
+│   │       └── auth-layout.tsx
+│   ├── fetures
+│   │   └── auth
+│   │       └── components
+│   │           ├── login-form.tsx
+│   │           └── sign-up-form.tsx
+│   ├── index.css
+│   ├── lib
+│   │   ├── auth.tsx
+│   │   └── validation.tsx
+│   ├── main.tsx
+│   ├── ui
+│   │   ├── Input.tsx
+│   │   └── button.tsx
+│   └── vite-env.d.ts
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+
+14 directories, 25 files
