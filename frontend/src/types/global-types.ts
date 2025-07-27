@@ -46,6 +46,7 @@ export interface UploadPromptProps {
     acceptedTypes?: readonly string[];
     className?: string;
     disabled?: boolean;
+    isLoading?: boolean;
 }
 
 export interface FileUploadError {

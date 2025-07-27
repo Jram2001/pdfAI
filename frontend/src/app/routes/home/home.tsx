@@ -21,7 +21,8 @@ export default function Home() {
     const [isFileUploaded, setIsFileUploaded] = React.useState(false);
     // State to store the initial message received after a successful PDF upload.
     const [initialMessage, setInitialMessage] = useState('');
-    // State to store the active page visible.
+    // State to store the loading boolean.
+    const [isPdfUploading, setIsPdfUploading] = useState<boolean>(false);
 
     // Configures pdfjs worker source globally for PDF rendering.
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -33,12 +34,14 @@ export default function Home() {
     const handleFileSelect = async (files: FileList) => {
         const fileArray = Array.from(files);
         setUploadedFile(fileArray);
-
+        setIsPdfUploading(true);
         try {
             const response = await uploadPDF(fileArray[0]);
+            setIsPdfUploading(false);
             setInitialMessage(response.data.message);
             setIsFileUploaded(true);
         } catch (error) {
+            setIsPdfUploading(false);
             if (axios.isAxiosError(error)) {
                 console.error('Upload failed:', error.response?.data || error.message);
             } else {
@@ -69,6 +72,7 @@ export default function Home() {
             {!isFileUploaded ? (
                 <UploadPrompt
                     onFileSelect={handleFileSelect}
+                    isLoading={isPdfUploading}
                     onError={handleError}
                     maxFileSize={5}
                     acceptedTypes={['.pdf', '.doc', '.docx']}
